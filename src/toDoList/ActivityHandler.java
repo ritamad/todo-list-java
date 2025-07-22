@@ -1,11 +1,13 @@
 package toDoList;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 import java.util.List;
 
 public class ActivityHandler {
 	
 	private List<Activity> list;
+	
 	
 	public ActivityHandler() {
 		list = new ArrayList<>();
@@ -43,7 +45,20 @@ public class ActivityHandler {
 		}
 	}
 	
+	public List<Activity> searchByKeyWord(String keyword) {
+	    String word = keyword.toLowerCase();
+	    return list.stream()
+	        .filter(a -> a.getName().toLowerCase().contains(word)
+	        		  || a.getLabels().stream().anyMatch(label -> label.contains(word)))
+	        .collect(Collectors.toList());
+	}
+
+	public List<Activity> completedActivity(){
+		return list.stream().filter(a -> a.isCompleted() == true).collect(Collectors.toList());
+	}
+	
 	
 	
 
 }
+

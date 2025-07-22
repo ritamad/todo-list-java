@@ -1,5 +1,7 @@
 package toDoList;
 
+
+import java.util.List;
 import java.util.Scanner;
 import java.time.LocalDate;
 
@@ -19,12 +21,22 @@ public class Main {
 				"(2) Show activity\n"+
 				"(3) Complete activity\n"+
 				"(4) Delete activty\n"+
+				"(5) Search activty\n"+
+				"(6) Completed activities:\n"+
 				"(0) Exit \n"+
 				"\n Select > "
 				);
 				
-				int choice = scanner.nextInt();
-				scanner.nextLine();
+				String input = scanner.nextLine();
+				int choice;
+				
+				try {
+					choice = Integer.parseInt(input);
+				} catch (NumberFormatException e){
+					System.out.println("Invalid input. Please enter a number!");
+					continue;
+					
+				}
 				
 				switch(choice) {
 					case 1:
@@ -51,14 +63,38 @@ public class Main {
 						scanner.nextLine();
 						handler.removeActivity(indexDel);
 						break;
+					case 5:
+						System.out.println("Search by keyword: ");
+						String keyword = scanner.nextLine();
+						List<Activity> filteredAct = handler.searchByKeyWord(keyword);
+						if (filteredAct.isEmpty()) {
+							System.out.println("No activity found");
+						} else {
+							System.out.println("Activities found: ");
+							filteredAct.forEach(System.out::println);
+						}
+						break;
+					case 6:
+						System.out.println("Completed activities : ");
+						List<Activity> completed = handler.completedActivity();
+						if (completed.isEmpty()) {
+							System.out.println("No completed activity found");
+						} else {
+							completed.forEach(System.out::println);
+						}
+						break;
 					case 0:
 						cont = false;
 						break;
 					default:
-						System.out.println("Invalid choice: ");		
+						System.out.println("Invalid choice");		
 				}	
 		}	
 		 scanner.close();
 	        System.out.println("Goodbye!!");
 	}
 }
+
+
+
+
